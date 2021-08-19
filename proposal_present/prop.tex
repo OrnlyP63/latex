@@ -22,7 +22,7 @@
 \setbeamercolor{background canvas}{bg=white}
 
 \title{Ground Shaking Prediction}
-\subtitle{with Graph Nueral Network}
+\subtitle{with Graph Neural Network and Semi-Supervised Learning}
 \author{Phiphat Chomchit}
 \institute{Chiang Mai University}
 
@@ -34,67 +34,87 @@
 		\titlepage
 	\end{frame}
 	
+	\begin{frame}[t]{Earthquake Warning}
+		\centering
+		\textbf{Ground Shaking Prediction.}
+		\begin{itemize}
+			\item Ground Motion Prediction Equations (GMPEs)
+			\item Temporal and Spatial Prediction
+			\item Imbalanced Data
+		\end{itemize}
+		\textbf{My work}
+		\begin{itemize}
+			\item Graph Convolutional Neural Network 
+			\item Self-Supervised Learning
+			\item Semi-Supervised Learning
+		\end{itemize}
+	\end{frame}
+
+	\begin{frame}[t]{Why do we need machine learning?}
+		\begin{enumerate}
+			\item Seismic data
+			\begin{itemize}
+				\item Imbalanced Data
+				\item Temporal and Spatial Data
+			\end{itemize}
+			\item Purpose of model
+			\begin{itemize}
+				\item rapid warning
+				\item peak ground motion prediction
+			\end{itemize}
+		\end{enumerate}
+		
+		\begin{figure}
+			\includegraphics[scale=0.5]{imb.png}
+			\caption{seismic data are long tail data. (Dario, 2020)}
+		\end{figure}
+	\end{frame}
 	\begin{frame}[t]{Basic Seismic Knowlendge}
 		
 		\begin{enumerate}
-			\item \textbf{Earthquake} is the sudden fracture and movement of rocks inside the Earth. 
-			Part of the energy released produces seismic waves, like P, S, and surface waves that 
-			travel outward in all directions from the point of initial rupture.
+			\item \textbf{Earthquake} is the sudden fracture and movement of rocks inside the Earth.  Part of the energy released produces seismic waves.
+			\seti
+		\end{enumerate}
+		\begin{figure}
+			\centering
+			\includegraphics[scale=0.5]{stick.jpg}
+			\caption{stick-slip model (Santi Pailoplee, 2021)}
+		\end{figure}
+	\end{frame}
+
+	\begin{frame}[t]{Basic Seismic Knowlendge}
+		\begin{enumerate}
+			\conti
 			\item \textbf{Hypocenter} or Focus the point below the epicenter at which an earthquake
 			begins.
 			\item \textbf{Epicenter} the point (map location) on the Earth’s surface directly above 
 			the hypocenter or focus of an earthquake.
 			\seti
 		\end{enumerate}
-		
-	\end{frame}
-	
-	\begin{frame}[t]{stick-slip model}
 		\begin{figure}
 			\centering
-			\includegraphics[scale=0.5]{stick.jpg}
-			\caption{sick-slip model}
+			\includegraphics[scale=0.8]{velocity.jpg}
+			\caption{Epicenter and Hypocenter (Santi Pailoplee, 2021)}
 		\end{figure}
 	\end{frame}
-	
+
 	\begin{frame}[t]{Basic Seismic Knowlendge}
 		\begin{enumerate}
 			\conti
 			\item \textbf{P Wave} is the primary body wave; the first seismic wave detected by 
-			seismographs; able to move through both liquid and solid rock. Also called compressional or 
-			longitudinal waves, they compress and expand (oscillate) the ground back and forth in the 
-			direction of travel, like sound waves that move back and forth as the waves travel from source 
-			to receiver. P wave is the fastest wave.
+			seismographs; able to move through both liquid and solid rock. P wave is the fastest wave.
 			
-			\item \textbf{S Waves} is shear waves that are secondary body waves that oscillate the ground 
-			perpendicular to the direction of wave travel. They travel about 1.7 times slower than P waves. 
-			Because liquids will not sustain shear stresses, S waves will not travel through liquids like water, 
-			molten rock, or the Earth’s outer core. S waves produce vertical and horizontal motion in the 
-			ground surface. 
+			\item \textbf{S Waves} is shear waves that are secondary body waves that oscillate the ground perpendicular to the direction of wave travel. 
 			\seti
 		\end{enumerate}
-	\end{frame}
-	
-	\begin{frame}[t]{Body wave and surface wave}
 		\begin{figure}
 			\centering
-			\includegraphics[scale=0.8]{station.jpg}
-			\caption{P-wave, S-wave and surface wave}
+			\includegraphics[scale=0.6]{station.jpg}
+			\caption{P-wave, S-wave and surface wave (Santi Pailoplee, 2021)}
 		\end{figure}
 	\end{frame}
-	
-	\begin{frame}[t]{Epicenter and Hypocenter}
-		\begin{figure}
-			\centering
-			\includegraphics[scale=0.8]{velocity.jpg}
-			\caption{Epicenter and Hypocenter}
-		\end{figure}
-		$V = \frac{S}{T}$
+
 		
-		$$T_p - T_s = \frac{S}{V_p} - \frac{S}{V_s}$$
-	\end{frame}
-	
-	
 	\begin{frame}[t]{Basic Seismic Knowlendge}
 		\begin{enumerate}
 			\conti
@@ -106,7 +126,7 @@
 		\begin{figure}
 			\centering
 			\includegraphics[scale=0.35]{pga.jpg}
-			\caption{PGA, PGV, PGD}
+			\caption{PGA, PGV, PGD (Santi Pailoplee, 2021)}
 		\end{figure}
 	\end{frame}
 	
@@ -122,7 +142,7 @@
 	
 		\begin{figure}
 			\includegraphics[scale=0.35]{anu.jpg}
-			\caption{Attenuation}
+			\caption{Attenuation (Santi Pailoplee, 2021)}
 		\end{figure}
 	\end{frame}
 
@@ -138,20 +158,20 @@
 		\begin{figure}
 			\centering
 			\includegraphics[scale=0.5]{shak.jpg}
-			\caption{Ground Shaking}
+			\caption{Ground Shaking (Santi Pailoplee, 2021)}
 		\end{figure}
 	\end{frame}
 	
 	\begin{frame}[t]{Basic Seismic Knowlendge}
 		\begin{enumerate}
 			\conti
-			\item \textbf{ShakeMap} The system is designed to combine instrumental measurements with information about local seismic site conditions and the earthquake source to estimate continuous shaking variations throughout a 
-			spatial area. ShakeMap was implemented in other high-to-moderate-risk areas where rapid assessment of earthquakes is critical.
+			\item \textbf{ShakeMap} The system is designed to combine instrumental measurements with information about \textbf{local seismic site conditions} and \textbf{the earthquake source} to estimate continuous shaking variations throughout a spatial area
+
 		\end{enumerate}
 		\begin{figure}
 			\centering
-			\includegraphics[scale=0.4]{example.png}
-			\caption{Ground Shaking}
+			\includegraphics[scale=0.5]{example.png}
+			\caption{ShakeMap(USGS, 2018)}
 		\end{figure}
 		
 	\end{frame}
@@ -164,8 +184,8 @@
 			\item Parameters
 			\begin{enumerate}
 				\item Multilayer Perceptron
-				\item Hybrid
-				\item Genertic Programing
+				\item Hybrid GMPE
+
 			\end{enumerate}
 			\vspace{10pt}
 			\item Waveform
@@ -178,30 +198,12 @@
 		\end{enumerate}
 	\end{frame}
 	
-	\begin{frame}[t]{Why do we need machine learning?}
-		\begin{enumerate}
-			\item Seismic data
-				\begin{itemize}
-					\item Imbalanced data
-					\item Big data (Volume  Velocity and Variety )
-				\end{itemize}
-			\item Purpose of model
-				\begin{itemize}
-					\item rapid warning
-					\item peak ground motion prediction
-				\end{itemize}
-		\end{enumerate}
-	
-		\begin{figure}
-			\includegraphics[scale=0.5]{imb.png}
-			\caption{seismic data are long tail data.}
-		\end{figure}
-	\end{frame}
+
 
 	\begin{frame}[t]{Multilayer Perceptron}
 		\begin{figure}
 			\includegraphics[scale=0.4]{mlp.png}
-			\caption{PGA prediction with ANN}
+			\caption{PGA prediction with ANN (Derras, 2014)}
 		\end{figure}
 		
 	\end{frame}
@@ -209,7 +211,7 @@
 	\begin{frame}[t]{Hybrid}
 		\begin{figure}
 			\includegraphics[scale=0.5]{hybrid.png}
-			\caption{Hybrid model(GMPE + ERT)}
+			\caption{Hybrid model(GMPE + ERT) (Hisahiko, 2020)}
 		\end{figure}
 	\end{frame}
 	
@@ -217,7 +219,7 @@
 	\begin{frame}[t]{Convolutional Neural Network}
 		\begin{figure}
 			\includegraphics[scale=0.3]{cnn.png}
-			\caption{CNN for rapid earthquake warning}
+			\caption{CNN for rapid earthquake warning (Dario, 2020)}
 		\end{figure}
 	\end{frame}
 	
@@ -226,7 +228,7 @@
 	\begin{frame}[t]{Graph Neural Network}
 		\begin{figure}
 			\includegraphics[scale=0.3]{gnn.png}
-			\caption{Characterize source of earthquake with GNN}
+			\caption{Characterize source of earthquake with GNN (M. P. A. van den Ende, 2020)}
 		\end{figure}
 	\end{frame}
 	
@@ -312,22 +314,8 @@
 	\end{enumerate}
 	\end{frame}
 
-	\begin{frame}[t]{Example predict PM2.5 on graph station}
-		\begin{figure}
-			\includegraphics[scale=0.4]{station_pm.png}
-			\caption{Predict PM2.5 with GNN}
-		\end{figure}
-	\end{frame}
 	\begin{frame}[t]{Focus on my work}
 		\section{Semi-Supervised Learning and Self-Supervised Learning.}
-		
-		\begin{figure}
-			\centering
-			\includegraphics[scale=0.1]{newplot.png}
-			\caption{Machine Learning}
-		\end{figure}
-	
-
 	\end{frame}	
 
 	\begin{frame}[t]{Self Supervised Learning?}\vspace{10pt}
@@ -342,40 +330,24 @@
 		\begin{figure}
 			\centering
 			\includegraphics[scale=0.2]{google_semi.jpg}
-			\caption{Semi and Self supervised learning}
+			\caption{Semi and Self supervised learning (Qizhe Xie, 2019)}
 		\end{figure}
 	\end{frame}
 	\begin{frame}[t]{Data Augmentation(Image data)}
 		\begin{enumerate}
 			\item Colorization
-			\item Placing image patches in the right place
-			\item Inpainting
+			\item Autoencoder
 		\end{enumerate}
+	\begin{figure}
+		\centering
+		\includegraphics[scale=0.7]{color.png}
+		\caption{change color tone (fast.ai, 2021)}
+		\includegraphics[scale=0.71]{inpainting.png}
+		\caption{Autoencoder (Lilian Weng, 2019)}
+	\end{figure}
 	\end{frame}
 	
-	\begin{frame}{Colorization}\vspace{4pt}
-		\begin{figure}
-			\centering
-			\includegraphics[scale=1]{color.png}
-			\caption{change color tone}
-		\end{figure}
-	\end{frame}
 	
-	\begin{frame}{Placing image patches in the right place}\vspace{4pt}
-		\begin{figure}
-			\centering
-			\includegraphics[scale=1]{placing.png}
-			\caption{Location split image}
-		\end{figure}
-	\end{frame}
-	
-	\begin{frame}{Inpainting}\vspace{4pt}
-		\begin{figure}
-			\centering
-			\includegraphics[scale=1]{inpainting.png}
-			\caption{Autoencoder}
-		\end{figure}
-	\end{frame}
 	
 	
 	\begin{frame}[t]{Fomulation}
@@ -404,7 +376,7 @@
 	\begin{frame}[t]{Clustering Earthquake Source with Self-Supervised Learning}
 		\begin{figure}
 			\includegraphics[scale=0.5]{self.png}
-			\caption{self-supervised learning cluster local and teleseismic}
+			\caption{self-supervised learning cluster local and teleseismic (S. Mostafa Mousavi, 2019)}
 		\end{figure}
 	\end{frame}
 
@@ -415,7 +387,7 @@
 	\end{enumerate}
 	\begin{figure}
 		\includegraphics[scale=0.3]{result.png}
-		\caption{SSL and imbalanced data}
+		\caption{SSL and imbalanced data (Yuzhe Yang, 2020)}
 	\end{figure}
 	\end{frame}
 
@@ -439,7 +411,7 @@
 		\end{enumerate}
 		\begin{figure}
 			\includegraphics[scale=0.4]{self_graph.png}
-			\caption{Self-supervised Training of Graph Convolutional Networks model }
+			\caption{Self-supervised Training of Graph Convolutional Networks model (Qikui Zhu, 2020)}
 		\end{figure}
 	\end{frame}
 
